@@ -55,14 +55,24 @@ export default function QuizRoutes(app) {
                 }
             });
     
-            const submission = await Submission.create({
-                quizId,
-                studentId,
-                answers,
-                score,
-            });
+            let submission = await Submission.findOne({ quizId, studentId });
     
-            res.json({ message: 'Submitted', score, submissionId: submission._id });
+            if (submission) {
+                submission.answers = answers;
+                submission.score = score;
+                submission.numAttempts = submission.numAttempts ? submission.numAttempts + 1 : 2;
+                await submission.save();
+                return res.json({ message: 'Submission updated', score, submissionId: submission._id, numAttempts: submission.numAttempts });
+            } else {
+                submission = await Submission.create({
+                    quizId,
+                    studentId,
+                    answers,
+                    score,
+                    numAttempts: 1,
+                });
+                return res.json({ message: 'Submitted', score, submissionId: submission._id, numAttempts: submission.numAttempts });
+            }
         } catch (err) {
             console.error(err);
             res.status(500).send('Failed to submit');

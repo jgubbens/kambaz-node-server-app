@@ -1,5 +1,6 @@
 import model from './model.js';
 import {v4 as uuidv4 } from "uuid";
+import submissionSchema from './submissionSchema.js';
 
 export function createQuiz(quiz) {
     const newQuiz = { ...quiz, _id: uuidv4() };

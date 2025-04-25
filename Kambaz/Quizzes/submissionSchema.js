@@ -5,7 +5,8 @@ const submissionSchema = new mongoose.Schema({
   studentId: { type: String, required: true },
   answers: { type: Object, required: true },
   score: Number,
-  submittedAt: { type: Date, default: Date.now }
+  submittedAt: { type: Date, default: Date.now },
+  numAttempts: Number,
 }, { collection: 'submissions' });
 
 export default mongoose.model('Submission', submissionSchema);
